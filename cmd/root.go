@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -15,6 +16,11 @@ var appVersion, appCommit, appDate string
 func SetVersion(v, c, d string) { appVersion, appCommit, appDate = v, c, d }
 
 func Execute() {
+	config.Init()
+	for name, ch := range config.C.CaptureHeaders {
+		rootCmd.PersistentFlags().Bool(name, false,
+			fmt.Sprintf("Capture %q header (from capture_headers config)", ch.Header))
+	}
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
 	}
@@ -27,17 +33,7 @@ var rootCmd = &cobra.Command{
 authenticated API requests. Supports 5 auth modes, API capture,
 token extraction, and local cache management.`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		// Initialize config before any command runs
-		config.Init()
-		// Dynamically register --<name> flags from capture_headers config
-		for name, ch := range config.C.CaptureHeaders {
-			flagName := name
-			headerName := ch.Header
-			if !cmd.Root().Flags().Changed(flagName) {
-				cmd.Root().PersistentFlags().Bool(flagName, false,
-					fmt.Sprintf("Capture %q header (from capture_headers config)", headerName))
-			}
-		}
+		config.Init() // idempotent - safe to call again
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {
@@ -88,16 +84,9 @@ func init() {
 }
 
 func parseHost(rawURL string) string {
-	for _, prefix := range []string{"https://", "http://"} {
-		if len(rawURL) > len(prefix) && rawURL[:len(prefix)] == prefix {
-			rawURL = rawURL[len(prefix):]
-			break
-		}
+	u, err := url.Parse(rawURL)
+	if err != nil || u.Host == "" {
+		return rawURL
 	}
-	for i, ch := range rawURL {
-		if ch == '/' || ch == '?' || ch == ':' {
-			return rawURL[:i]
-		}
-	}
-	return rawURL
+	return u.Hostname() // strips port, returns bare hostname for cache key
 }

@@ -1,0 +1,35 @@
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos: [linux, darwin, windows]
+    goarch: [amd64, arm64]
+    ignore:
+      - goos: windows
+        goarch: arm64
+    ldflags:
+      - -s -w
+      - -X main.version={{.Version}}
+      - -X main.commit={{.Commit}}
+      - -X main.date={{.Date}}
+    binary: easy-web
+
+archives:
+  - formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: "easy-web_{{.Version}}_{{.Os}}_{{.Arch}}"
+
+checksum:
+  name_template: "checksums.txt"
+
+release:
+  github:
+    owner: smilemilks2021
+    name: easy-web

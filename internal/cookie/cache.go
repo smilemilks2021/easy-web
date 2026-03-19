@@ -24,7 +24,7 @@ func NewCache(dir string) *Cache { return &Cache{dir: dir} }
 
 func (c *Cache) file(domain string) string {
 	safe := strings.ReplaceAll(strings.ReplaceAll(domain, ":", "_"), "/", "_")
-	return filepath.Join(c.dir, safe+".json")
+	return filepath.Join(c.dir, filepath.Base(safe)+".json")
 }
 
 func (c *Cache) Save(domain string, entries []*Entry) error {
@@ -41,6 +41,9 @@ func (c *Cache) Save(domain string, entries []*Entry) error {
 func (c *Cache) Load(domain string) ([]*Entry, error) {
 	data, err := os.ReadFile(c.file(domain))
 	if err != nil {
+		if os.IsNotExist(err) {
+			return nil, nil
+		}
 		return nil, err
 	}
 	var entries []*Entry

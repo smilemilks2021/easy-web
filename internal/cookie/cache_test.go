@@ -26,7 +26,9 @@ func TestCacheRoundTrip(t *testing.T) {
 func TestCacheList(t *testing.T) {
 	dir := t.TempDir()
 	c := cookie.NewCache(dir)
-	_ = c.Save("a.com", []*cookie.Entry{{Name: "x", Value: "1", Domain: "a.com"}})
+	if err := c.Save("a.com", []*cookie.Entry{{Name: "x", Value: "1", Domain: "a.com"}}); err != nil {
+		t.Fatal(err)
+	}
 	domains, err := c.List()
 	if err != nil {
 		t.Fatal(err)

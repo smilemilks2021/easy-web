@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/chromedp/cdproto/network"
@@ -42,7 +43,10 @@ func CaptureRequests(targetURL string, opts CaptureOptions) ([]*CapturedRequest,
 	ctx, cancelTO := context.WithTimeout(ctx, opts.Timeout)
 	defer cancelTO()
 
-	var captured []*CapturedRequest
+	var (
+		mu       sync.Mutex
+		captured []*CapturedRequest
+	)
 
 	chromedp.ListenTarget(ctx, func(ev interface{}) {
 		req, ok := ev.(*network.EventRequestWillBeSent)
@@ -58,11 +62,13 @@ func CaptureRequests(targetURL string, opts CaptureOptions) ([]*CapturedRequest,
 				headers[k] = s
 			}
 		}
+		mu.Lock()
 		captured = append(captured, &CapturedRequest{
 			URL:     req.Request.URL,
 			Method:  req.Request.Method,
 			Headers: headers,
 		})
+		mu.Unlock()
 	})
 
 	if err := chromedp.Run(ctx,
@@ -80,7 +86,10 @@ func CaptureRequests(targetURL string, opts CaptureOptions) ([]*CapturedRequest,
 	case <-ctx.Done():
 		fmt.Println("Capture timeout reached.")
 	}
-	return captured, nil
+	mu.Lock()
+	result := captured
+	mu.Unlock()
+	return result, nil
 }
 
 func matchesPatterns(url string, patterns []string) bool {

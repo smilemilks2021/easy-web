@@ -103,7 +103,7 @@ func (d *Driver) LoginAndGetCookies(targetURL string, timeout time.Duration) ([]
 
 // LoginRemote connects to an already-running Chrome via CDP WebSocket.
 func (d *Driver) LoginRemote(targetURL string, debugPort int, timeout time.Duration) ([]*cookie.Entry, error) {
-	wsURL := fmt.Sprintf("ws://127.0.0.1:%d/json", debugPort)
+	wsURL := fmt.Sprintf("http://127.0.0.1:%d", debugPort)
 	allocCtx, cancelAlloc := chromedp.NewRemoteAllocator(context.Background(), wsURL)
 	defer cancelAlloc()
 	ctx, cancel := chromedp.NewContext(allocCtx)

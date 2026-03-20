@@ -47,13 +47,16 @@ func envLoad() (map[string]string, string) {
 // envSave writes updated environments and current_env back to ~/.easy-web.yaml
 // using viper.WriteConfigAs so that all existing settings are preserved.
 func envSave(envs map[string]string, current string) error {
-	viper.Set("environments", envs)
-	viper.Set("current_env", current)
-
 	cfgPath, err := envConfigPath()
 	if err != nil {
 		return err
 	}
+	// Load existing config first so other settings (e.g. capture_headers) are preserved.
+	viper.SetConfigFile(cfgPath)
+	_ = viper.ReadInConfig() // ignore error when file doesn't exist yet
+
+	viper.Set("environments", envs)
+	viper.Set("current_env", current)
 	return viper.WriteConfigAs(cfgPath)
 }
 

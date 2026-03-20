@@ -45,16 +45,15 @@ func init() {
 	// proxy
 	cmd.Flags().String("proxy", "", "Proxy URL (e.g. http://127.0.0.1:8080)")
 
+	// timeout
+	cmd.Flags().Duration("timeout", 0, "Request timeout (0 = use default 30s)")
+
 	// form / file body
 	cmd.Flags().StringArray("form", nil, "Form field key=value (sets application/x-www-form-urlencoded)")
 	cmd.Flags().StringArray("file", nil, "Multipart file field@/path (sets multipart/form-data)")
 
 	// jq filter
 	cmd.Flags().String("jq", "", "jq expression to filter JSON response")
-
-	// auth mode (forwarded from existing flag in auth.go; duplicated here for --mode support)
-	cmd.Flags().String("mode", "", "Auth mode override")
-	cmd.Flags().StringP("url", "u", "", "Target URL")
 
 	rootCmd.AddCommand(cmd)
 }
@@ -73,6 +72,7 @@ func runRequest(cmd *cobra.Command, _ []string) error {
 	retryCount, _ := cmd.Flags().GetInt("retry")
 	retryDelay, _ := cmd.Flags().GetDuration("retry-delay")
 	proxyURL, _ := cmd.Flags().GetString("proxy")
+	timeout, _ := cmd.Flags().GetDuration("timeout")
 	formFields, _ := cmd.Flags().GetStringArray("form")
 	fileFields, _ := cmd.Flags().GetStringArray("file")
 	jqExpr, _ := cmd.Flags().GetString("jq")
@@ -158,8 +158,12 @@ func runRequest(cmd *cobra.Command, _ []string) error {
 		Retry:      retryCount,
 		RetryDelay: retryDelay,
 		ProxyURL:   proxyURL,
+		Timeout:    timeout,
 	}
-	c := request.NewClient(entries, extra, opts)
+	c, err := request.NewClient(entries, extra, opts)
+	if err != nil {
+		return fmt.Errorf("create client: %w", err)
+	}
 
 	// --- verbose: print request info ---
 	if verbose {
@@ -181,7 +185,7 @@ func runRequest(cmd *cobra.Command, _ []string) error {
 
 	// --- verbose: print response headers ---
 	if verbose {
-		fmt.Fprintf(cmd.OutOrStdout(), "< HTTP %d %s\n", resp.StatusCode, resp.Status[strings.Index(resp.Status, " ")+1:])
+		fmt.Fprintf(cmd.OutOrStdout(), "< HTTP %d %s\n", resp.StatusCode, strings.TrimPrefix(resp.Status, fmt.Sprintf("%d ", resp.StatusCode)))
 		for k, vs := range resp.Header {
 			for _, v := range vs {
 				fmt.Fprintf(cmd.OutOrStdout(), "< %s: %s\n", k, v)
@@ -218,6 +222,8 @@ func runRequest(cmd *cobra.Command, _ []string) error {
 		if jqExpr != "" {
 			if filtered, ok := applyJQ(raw, jqExpr); ok {
 				raw = filtered
+			} else {
+				fmt.Fprintf(os.Stderr, "[jq] warning: filter %q failed or returned no results\n", jqExpr)
 			}
 		}
 
@@ -225,7 +231,11 @@ func runRequest(cmd *cobra.Command, _ []string) error {
 		var prettyBuf bytes.Buffer
 		if json.Valid(raw) {
 			if err := json.Indent(&prettyBuf, raw, "", "  "); err == nil {
-				fmt.Fprintln(out, colorizeJSON(prettyBuf.Bytes()))
+				s := prettyBuf.String()
+				if isTerminal() {
+					s = colorizeJSON(prettyBuf.Bytes())
+				}
+				fmt.Fprintln(out, s)
 				return nil
 			}
 		}
@@ -374,6 +384,15 @@ func lastOpenBracket(data []byte) byte {
 // isTokenEnd returns true for characters that end a JSON primitive token.
 func isTokenEnd(ch byte) bool {
 	return ch == ',' || ch == '}' || ch == ']' || ch == ':' || unicode.IsSpace(rune(ch))
+}
+
+// isTerminal returns true when stdout is an interactive terminal.
+func isTerminal() bool {
+	fi, err := os.Stdout.Stat()
+	if err != nil {
+		return false
+	}
+	return (fi.Mode() & os.ModeCharDevice) != 0
 }
 
 // applyJQ runs a jq expression against raw JSON bytes and returns the

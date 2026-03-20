@@ -147,10 +147,14 @@ func exportHAR(reqs []*browser.CapturedRequest, baseURL, outputPath string) erro
 		entries = append(entries, entry)
 	}
 
+	version := appVersion
+	if version == "" {
+		version = "dev"
+	}
 	har := harFile{
 		Log: harLog{
 			Version: "1.2",
-			Creator: harCreator{Name: "easy-web", Version: "0.2.0"},
+			Creator: harCreator{Name: "easy-web", Version: version},
 			Entries: entries,
 		},
 	}

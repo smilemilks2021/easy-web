@@ -108,7 +108,10 @@ func init() {
 				entries = result.Cookies
 			}
 
-			client := request.NewClient(entries, nil)
+			client, err := request.NewClient(entries, nil)
+			if err != nil {
+				return fmt.Errorf("create client: %w", err)
+			}
 
 			fmt.Printf("Replaying %d requests for %s\n", len(filtered), domain)
 			for i, r := range filtered {

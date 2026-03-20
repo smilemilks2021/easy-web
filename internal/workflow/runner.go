@@ -111,7 +111,12 @@ func (r *Runner) Run(wf *Workflow) (int, error) {
 		}
 
 		// Execute the request.
-		client := request.NewClient(r.cookies, headers)
+		client, clientErr := request.NewClient(r.cookies, headers)
+		if clientErr != nil {
+			fmt.Printf("  ERROR: create client: %v\n", clientErr)
+			failures++
+			continue
+		}
 		resp, err := client.Do(method, resolvedURL, body, nil)
 		if err != nil {
 			fmt.Printf("  ERROR: %v\n", err)

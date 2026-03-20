@@ -31,7 +31,7 @@ type Client struct {
 // existing call sites that pass (cookies, extraHeaders) continue to compile because
 // Go does not support overloading – callers must now pass Options explicitly.
 // To keep the existing test working, NewClient accepts options as a variadic arg.
-func NewClient(cookies []*cookie.Entry, extraHeaders map[string]string, opts ...Options) *Client {
+func NewClient(cookies []*cookie.Entry, extraHeaders map[string]string, opts ...Options) (*Client, error) {
 	o := Options{}
 	if len(opts) > 0 {
 		o = opts[0]
@@ -43,11 +43,20 @@ func NewClient(cookies []*cookie.Entry, extraHeaders map[string]string, opts ...
 		o.RetryDelay = time.Second
 	}
 
-	transport := http.DefaultTransport.(*http.Transport).Clone()
+	// #3 fix: safe type assertion — don't panic if DefaultTransport was replaced
+	base, ok := http.DefaultTransport.(*http.Transport)
+	if !ok || base == nil {
+		base = &http.Transport{}
+	}
+	transport := base.Clone()
+
+	// #7 fix: return error on invalid proxy URL instead of silently ignoring
 	if o.ProxyURL != "" {
-		if pu, err := url.Parse(o.ProxyURL); err == nil {
-			transport.Proxy = http.ProxyURL(pu)
+		pu, parseErr := url.Parse(o.ProxyURL)
+		if parseErr != nil {
+			return nil, fmt.Errorf("invalid proxy URL %q: %w", o.ProxyURL, parseErr)
 		}
+		transport.Proxy = http.ProxyURL(pu)
 	}
 
 	return &Client{
@@ -55,7 +64,7 @@ func NewClient(cookies []*cookie.Entry, extraHeaders map[string]string, opts ...
 		extraHeaders: extraHeaders,
 		opts:         o,
 		http:         &http.Client{Timeout: o.Timeout, Transport: transport},
-	}
+	}, nil
 }
 
 // Do performs the HTTP request with retry logic applied.
@@ -71,8 +80,10 @@ func (c *Client) Do(method, rawURL, body string, callHeaders map[string]string) 
 			time.Sleep(c.opts.RetryDelay)
 		}
 		resp, err = c.doOnce(method, rawURL, body, callHeaders)
-		if err == nil && resp.StatusCode < 500 {
-			return resp, nil
+		if err == nil {
+			if resp.StatusCode < 500 {
+				return resp, nil
+			}
 		}
 		// If we have a response body on a non-retryable or final attempt, drain it.
 		if resp != nil && attempt < maxAttempts-1 {

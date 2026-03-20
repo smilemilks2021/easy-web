@@ -85,7 +85,10 @@ func execHTTPRequest(step config.MultiStepStep, vars map[string]string) error {
 		method = "GET"
 	}
 
-	c := request.NewClient(nil, headers)
+	c, err := request.NewClient(nil, headers)
+	if err != nil {
+		return fmt.Errorf("create client: %w", err)
+	}
 	resp, err := c.Do(method, reqURL, "", nil)
 	if err != nil {
 		return err

@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"net/url"
 
 	"github.com/spf13/cobra"
 	"github.com/smilemilks2021/easy-web/internal/config"
@@ -33,7 +32,7 @@ func init() {
 
 			var cookies []*cookie.Entry
 			if lookupURL != "" {
-				domain := cookieDomain(lookupURL)
+				domain := parseHost(lookupURL)
 				if domain != "" {
 					store := cookie.NewCache(config.CacheDir())
 					cookies, err = store.Load(domain)
@@ -56,13 +55,4 @@ func init() {
 		},
 	}
 	rootCmd.AddCommand(cmd)
-}
-
-// cookieDomain extracts the hostname from a URL string for cookie cache lookup.
-func cookieDomain(rawURL string) string {
-	u, err := url.Parse(rawURL)
-	if err != nil || u.Host == "" {
-		return ""
-	}
-	return u.Hostname()
 }

@@ -123,7 +123,8 @@ func smartMerge(path string, reqs []*browser.CapturedRequest, baseURL, name stri
 
 	for _, req := range reqs {
 		key := req.Method + " " + req.URL
-		if seen[key] || existingURLs[req.URL] {
+		// Check both the new structured key and the legacy URL-only key.
+		if seen[key] || existingURLs[key] || existingURLs[req.URL] {
 			continue
 		}
 		seen[key] = true
@@ -158,6 +159,8 @@ func buildAPIBlock(req *browser.CapturedRequest) string {
 
 	var sb strings.Builder
 	sb.WriteString(fmt.Sprintf("\n### %s %s\n", req.Method, path))
+	// Structured comment enables method-aware dedup on smart merge.
+	sb.WriteString(fmt.Sprintf("<!-- easy-web: %s %s -->\n", req.Method, req.URL))
 	sb.WriteString("```bash\n")
 
 	switch {
@@ -188,13 +191,24 @@ func shellQuote(s string) string {
 	return fmt.Sprintf("%q", s)
 }
 
-// extractRecordedURLs scans a SKILL.md and returns all URLs already present
-// in `easy-web request -u "..."` lines.
+// extractRecordedURLs scans a SKILL.md and returns all API keys already present.
+// Keys are "METHOD URL" strings from structured comments (<!-- easy-web: METHOD URL -->),
+// with fallback to bare URL strings for legacy skills that predate structured comments.
 func extractRecordedURLs(content string) map[string]bool {
-	urls := map[string]bool{}
+	keys := map[string]bool{}
 	scanner := bufio.NewScanner(strings.NewReader(content))
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
+		// New structured format: <!-- easy-web: METHOD URL -->
+		if strings.HasPrefix(line, "<!-- easy-web:") && strings.HasSuffix(line, "-->") {
+			inner := strings.TrimSuffix(strings.TrimPrefix(line, "<!-- easy-web:"), "-->")
+			inner = strings.TrimSpace(inner)
+			if inner != "" {
+				keys[inner] = true // "METHOD URL"
+			}
+			continue
+		}
+		// Legacy format: easy-web request -u "URL" → key by bare URL for backward compat
 		if !strings.HasPrefix(line, "easy-web request -u ") {
 			continue
 		}
@@ -202,8 +216,8 @@ func extractRecordedURLs(content string) map[string]bool {
 		rest = strings.TrimSuffix(rest, ` \`)
 		rest = strings.Trim(rest, `"'`)
 		if rest != "" {
-			urls[rest] = true
+			keys[rest] = true // bare URL (legacy)
 		}
 	}
-	return urls
+	return keys
 }

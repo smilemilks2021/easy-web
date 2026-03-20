@@ -43,13 +43,17 @@ func init() {
 				entries = result.Cookies
 			}
 
-			client := request.NewClient(entries, nil)
+			client, err := request.NewClient(entries, nil)
+			if err != nil {
+				return fmt.Errorf("create client: %w", err)
+			}
 
 			ctx, cancel := context.WithCancel(context.Background())
 			defer cancel()
 
 			sigCh := make(chan os.Signal, 1)
 			signal.Notify(sigCh, syscall.SIGINT, syscall.SIGTERM)
+			defer signal.Stop(sigCh)
 			go func() {
 				<-sigCh
 				fmt.Fprintln(os.Stderr, "\nStopping watch...")

@@ -63,6 +63,7 @@ Example:
 	genCmd.Flags().StringArrayP("pattern", "p", nil, "URL filter pattern (OR)")
 	genCmd.Flags().Duration("timeout", 0, "Capture timeout (0 = use last captured data)")
 	genCmd.Flags().String("from-file", "", "Generate from a saved request list JSON file")
+	_ = genCmd.Flags().MarkHidden("from-file")
 
 	listCmd := &cobra.Command{
 		Use:   "list",

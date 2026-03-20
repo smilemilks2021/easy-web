@@ -1,120 +1,668 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>easy-web — Browser Auth CLI</title>
+<title>easy-web — 安装指南</title>
 <style>
-:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--blue:#58a6ff;--green:#3fb950;--text:#c9d1d9;--muted:#8b949e}
-*{box-sizing:border-box;margin:0;padding:0}
-body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}
-.hero{text-align:center;padding:60px 20px 40px;border-bottom:1px solid var(--border)}
-.hero h1{font-size:2.8rem;font-weight:700;color:#fff;margin-bottom:12px}
-.hero h1 span{color:var(--blue)}
-.hero p{font-size:1.1rem;color:var(--muted);max-width:600px;margin:0 auto 28px}
-.badge{display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-size:.82rem;margin:0 3px}
-.tabs{display:flex;gap:4px;margin:28px auto 0;max-width:640px;justify-content:center}
-.tab{padding:8px 20px;border-radius:6px 6px 0 0;cursor:pointer;background:var(--card);border:1px solid var(--border);border-bottom:none;color:var(--muted);font-size:.9rem}
-.tab.active{color:var(--blue);background:#1a2233;border-color:var(--blue)}
-.tab-content{display:none;background:var(--card);border:1px solid var(--border);border-radius:0 8px 8px 8px;padding:20px 24px;max-width:640px;margin:0 auto;position:relative}
-.tab-content.active{display:block}
-.tab-content .label{font-size:.72rem;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
-.tab-content code{color:var(--green);font-family:"SF Mono",Consolas,monospace;font-size:.92rem;word-break:break-all}
-.copy-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:var(--blue);color:#fff;border:none;border-radius:6px;padding:5px 14px;cursor:pointer;font-size:.8rem}
-.copy-btn:hover{opacity:.85}
-section{max-width:960px;margin:0 auto;padding:48px 20px}
-h2{font-size:1.5rem;color:#fff;margin-bottom:20px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
-.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px}
-.card h3{color:var(--blue);margin-bottom:6px;font-size:.95rem}
-.card p{color:var(--muted);font-size:.88rem}
-table{width:100%;border-collapse:collapse}
-th,td{padding:9px 14px;border-bottom:1px solid var(--border);text-align:left;font-size:.88rem}
-th{color:var(--muted);font-weight:500}
-td code{color:var(--green);font-family:"SF Mono",Consolas,monospace;font-size:.82rem}
-.platforms{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
-.platform{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 18px;font-size:.88rem}
-footer{text-align:center;padding:28px;color:var(--muted);font-size:.83rem;border-top:1px solid var(--border)}
-footer a{color:var(--blue);text-decoration:none}
+:root {
+  --bg: #0d1117;
+  --bg2: #0a0f18;
+  --card: #161b22;
+  --card2: #1c2333;
+  --border: #30363d;
+  --blue: #58a6ff;
+  --blue2: #1f6feb;
+  --green: #3fb950;
+  --yellow: #d29922;
+  --purple: #a371f7;
+  --text: #c9d1d9;
+  --muted: #8b949e;
+  --white: #f0f6fc;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.6; }
+
+/* Hero */
+.hero {
+  background: linear-gradient(160deg, #0d1b2e 0%, #0d1117 50%);
+  padding: 64px 20px 56px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.hero-logo { font-size: 3.2rem; font-weight: 800; color: var(--white); letter-spacing: -1px; }
+.hero-logo span { color: var(--blue); }
+.hero-tagline { font-size: 1.15rem; color: var(--muted); margin: 12px auto 24px; max-width: 560px; }
+.badges { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-bottom: 36px; }
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--card2); border: 1px solid var(--border);
+  border-radius: 20px; padding: 4px 12px; font-size: .78rem; color: var(--muted);
+}
+
+/* System detect banner */
+.detect-banner {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #152035; border: 1px solid #1f3a5f;
+  border-radius: 8px; padding: 8px 16px; font-size: .85rem;
+  color: var(--blue); margin-bottom: 28px;
+}
+.detect-banner .dot { width: 8px; height: 8px; background: var(--green); border-radius: 50%; }
+
+/* Install Tabs */
+.install-box { max-width: 680px; margin: 0 auto; }
+.install-tabs { display: flex; border-bottom: 1px solid var(--border); margin-bottom: -1px; }
+.install-tab {
+  padding: 10px 20px; font-size: .88rem; cursor: pointer;
+  color: var(--muted); border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+  user-select: none;
+}
+.install-tab:hover { color: var(--text); }
+.install-tab.active { color: var(--blue); border-bottom-color: var(--blue); }
+
+.install-panel { display: none; background: var(--card); border: 1px solid var(--border); border-top: none; border-radius: 0 0 10px 10px; }
+.install-panel.active { display: block; }
+
+/* Terminal mockup */
+.terminal {
+  background: #010409; border-radius: 0 0 10px 10px; overflow: hidden;
+}
+.terminal-bar {
+  background: #1c2128; padding: 10px 16px; display: flex; align-items: center; gap: 6px;
+  border-bottom: 1px solid #30363d;
+}
+.terminal-dot { width: 12px; height: 12px; border-radius: 50%; }
+.terminal-dot.red { background: #ff5f57; }
+.terminal-dot.yellow { background: #febc2e; }
+.terminal-dot.green { background: #28c840; }
+.terminal-title { font-size: .75rem; color: var(--muted); margin-left: 6px; }
+.terminal-body { padding: 16px 20px; font-family: "SF Mono", "Fira Code", Consolas, monospace; font-size: .85rem; line-height: 1.8; }
+.terminal-body .prompt { color: var(--green); }
+.terminal-body .cmd { color: var(--white); }
+.terminal-body .out { color: var(--muted); }
+.terminal-body .out.ok { color: var(--green); }
+.terminal-body .out.info { color: var(--blue); }
+
+/* One-click panel */
+.oneclick-panel { padding: 20px 24px 0; }
+.os-select { display: flex; gap: 8px; margin-bottom: 16px; }
+.os-btn {
+  padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: .85rem;
+  background: var(--card2); border: 1px solid var(--border); color: var(--muted);
+  transition: all .15s;
+}
+.os-btn.active { background: #162032; border-color: var(--blue); color: var(--blue); }
+.cmd-block {
+  background: #010409; border: 1px solid #30363d; border-radius: 8px;
+  padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  margin-bottom: 20px;
+}
+.cmd-block code { color: var(--green); font-family: "SF Mono", Consolas, monospace; font-size: .88rem; word-break: break-all; flex: 1; }
+.copy-btn {
+  flex-shrink: 0; background: var(--blue2); color: var(--white);
+  border: none; border-radius: 6px; padding: 6px 14px; cursor: pointer;
+  font-size: .8rem; transition: opacity .15s;
+}
+.copy-btn:hover { opacity: .85; }
+.copy-btn.copied { background: var(--green); }
+
+/* macOS Gatekeeper dialog mockup */
+.macos-dialog-wrap { padding: 20px 24px; }
+.macos-dialog {
+  background: #ececec; border-radius: 12px; width: 280px; margin: 0 auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,.5); padding: 22px 20px 16px; text-align: center;
+  color: #1d1d1f; font-family: -apple-system, sans-serif;
+}
+.macos-dialog .icon { font-size: 2.8rem; margin-bottom: 8px; }
+.macos-dialog h4 { font-size: .92rem; font-weight: 600; color: #1d1d1f; margin-bottom: 6px; line-height: 1.4; }
+.macos-dialog p { font-size: .78rem; color: #6e6e73; line-height: 1.5; margin-bottom: 16px; }
+.macos-dialog .btn-row { display: flex; gap: 8px; }
+.macos-dialog .btn-cancel { flex: 1; padding: 7px; background: #d1d1d6; border: none; border-radius: 7px; font-size: .82rem; cursor: pointer; }
+.macos-dialog .btn-ok { flex: 1; padding: 7px; background: #007aff; border: none; border-radius: 7px; color: #fff; font-size: .82rem; cursor: pointer; font-weight: 600; }
+.dialog-desc { max-width: 360px; margin: 16px auto 0; text-align: center; font-size: .82rem; color: var(--muted); line-height: 1.6; }
+.dialog-desc code { color: var(--blue); font-family: "SF Mono", monospace; }
+
+/* Steps */
+.steps { padding: 20px 24px; }
+.step { display: flex; gap: 14px; margin-bottom: 18px; }
+.step-num {
+  flex-shrink: 0; width: 26px; height: 26px; border-radius: 50%;
+  background: var(--blue2); color: #fff; font-size: .78rem; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+}
+.step-content h4 { font-size: .88rem; color: var(--white); margin-bottom: 4px; }
+.step-content p { font-size: .82rem; color: var(--muted); line-height: 1.5; }
+.step-content code { color: var(--blue); font-family: "SF Mono", monospace; font-size: .82rem; }
+
+/* Features */
+section { max-width: 960px; margin: 0 auto; padding: 52px 20px; }
+.section-title { font-size: 1.5rem; color: var(--white); font-weight: 700; margin-bottom: 8px; }
+.section-sub { color: var(--muted); font-size: .9rem; margin-bottom: 28px; }
+.feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(268px, 1fr)); gap: 14px; }
+.feature-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px;
+  padding: 20px; transition: border-color .2s;
+}
+.feature-card:hover { border-color: #444c56; }
+.feature-icon { font-size: 1.5rem; margin-bottom: 10px; }
+.feature-card h3 { font-size: .92rem; color: var(--white); margin-bottom: 6px; }
+.feature-card p { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+
+/* Commands table */
+.cmd-table { width: 100%; border-collapse: collapse; }
+.cmd-table th, .cmd-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); text-align: left; font-size: .85rem; }
+.cmd-table th { color: var(--muted); font-weight: 500; background: var(--card2); }
+.cmd-table tr:last-child td { border-bottom: none; }
+.cmd-table td:first-child code { color: var(--green); font-family: "SF Mono", monospace; font-size: .82rem; white-space: nowrap; }
+
+/* Quick start */
+.quickstart-block {
+  background: var(--card); border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+}
+.qb-header {
+  background: var(--card2); padding: 12px 16px; display: flex; align-items: center;
+  gap: 8px; border-bottom: 1px solid var(--border);
+}
+.qb-header .dot { width: 10px; height: 10px; border-radius: 50%; }
+.qb-body { padding: 16px 20px; font-family: "SF Mono", Consolas, monospace; font-size: .84rem; line-height: 2; }
+.qb-comment { color: var(--muted); }
+.qb-cmd { color: var(--white); }
+.qb-cmd span.kw { color: var(--blue); }
+.qb-cmd span.url { color: var(--green); }
+
+/* Platform */
+.platform-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-top: 20px; }
+.platform-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+  padding: 14px 16px; display: flex; align-items: center; gap: 10px;
+}
+.platform-icon { font-size: 1.4rem; }
+.platform-info { font-size: .84rem; }
+.platform-name { color: var(--white); font-weight: 500; }
+.platform-arch { color: var(--muted); font-size: .78rem; }
+.platform-status { color: var(--green); font-size: .8rem; margin-top: 2px; }
+
+/* Auth modes */
+.mode-table { width: 100%; border-collapse: collapse; }
+.mode-table th, .mode-table td { padding: 10px 14px; border-bottom: 1px solid var(--border); font-size: .85rem; }
+.mode-table th { color: var(--muted); font-weight: 500; background: var(--card2); text-align: left; }
+.mode-table td code { color: var(--yellow); font-family: "SF Mono", monospace; font-size: .82rem; }
+.mode-table td:first-child { font-weight: 600; color: var(--white); }
+.mode-table tr:last-child td { border-bottom: none; }
+
+/* Footer */
+footer { text-align: center; padding: 32px 20px; color: var(--muted); font-size: .82rem; border-top: 1px solid var(--border); }
+footer a { color: var(--blue); text-decoration: none; }
+footer a:hover { text-decoration: underline; }
+.divider { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* Responsive */
+@media (max-width: 600px) {
+  .hero-logo { font-size: 2.4rem; }
+  .install-tabs { overflow-x: auto; }
+}
 </style>
 </head>
 <body>
-<div class="hero">
-  <h1><span>easy</span>-web</h1>
-  <p>Browser authentication CLI — capture login cookies, automate authenticated API calls from your terminal.</p>
-  <span class="badge">Go</span><span class="badge">macOS</span><span class="badge">Linux</span><span class="badge">Windows</span><span class="badge">MIT</span>
 
-  <div class="tabs">
-    <div class="tab active" onclick="switchOS('unix',this)">macOS / Linux</div>
-    <div class="tab" onclick="switchOS('win',this)">Windows</div>
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-logo"><span>easy</span>-web</div>
+  <p class="hero-tagline">浏览器认证 CLI 工具 — 捕获登录 Cookie，在终端自动化执行需要认证的 API 调用</p>
+  <div class="badges">
+    <span class="badge">Go 1.22+</span>
+    <span class="badge">macOS · Linux · Windows</span>
+    <span class="badge">MIT</span>
+    <span class="badge">CGO_ENABLED=0</span>
   </div>
-  <div id="tab-unix" class="tab-content active">
-    <div class="label">Install with curl</div>
-    <code id="cmd-unix">curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh</code>
-    <button class="copy-btn" onclick="copy('cmd-unix',this)">Copy</button>
+
+  <div id="detect-banner" class="detect-banner">
+    <span class="dot"></span>
+    <span id="detect-text">正在检测系统…</span>
   </div>
-  <div id="tab-win" class="tab-content">
-    <div class="label">Install with PowerShell</div>
-    <code id="cmd-win">irm https://smilemilks2021.github.io/easy-web/install.ps1 | iex</code>
-    <button class="copy-btn" onclick="copy('cmd-win',this)">Copy</button>
+
+  <div class="install-box">
+    <div class="install-tabs">
+      <div class="install-tab active" data-tab="oneclick">一键安装</div>
+      <div class="install-tab" data-tab="terminal">Terminal 指南</div>
+      <div class="install-tab" data-tab="manual">手动安装</div>
+      <div class="install-tab" data-tab="macos-auth">macOS 授权</div>
+    </div>
+
+    <!-- 一键安装 -->
+    <div class="install-panel active" data-panel="oneclick">
+      <div class="oneclick-panel">
+        <div class="os-select">
+          <div class="os-btn active" data-os="mac">macOS</div>
+          <div class="os-btn" data-os="linux">Linux</div>
+          <div class="os-btn" data-os="win">Windows</div>
+        </div>
+        <div id="cmd-oneclick" class="cmd-block">
+          <code id="cmd-text">curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh</code>
+          <button class="copy-btn" onclick="copyCmd(this)">复制</button>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Terminal</span>
+        </div>
+        <div class="terminal-body" id="term-oneclick">
+          <div><span class="prompt">$ </span><span class="cmd">curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh</span></div>
+          <div class="out info">Detecting system: darwin/arm64</div>
+          <div class="out">Downloading easy-web v0.1.0 for darwin/arm64...</div>
+          <div class="out">  ██████████████████████████████  100%</div>
+          <div class="out ok">✓ Installed to /usr/local/bin/easy-web</div>
+          <div class="out ok">✓ easy-web v0.1.0 ready</div>
+          <br>
+          <div><span class="prompt">$ </span><span class="cmd">easy-web version</span></div>
+          <div class="out">easy-web v0.1.0 darwin/arm64 (build: abc1234)</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Terminal 指南 -->
+    <div class="install-panel" data-panel="terminal">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>运行安装脚本</h4>
+            <p>打开 Terminal，粘贴并执行以下命令：</p>
+          </div>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Terminal — zsh</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="prompt">$ </span><span class="cmd">curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh</span></div>
+          <div class="out info">Detecting system: darwin/arm64</div>
+          <div class="out">Downloading easy-web v0.1.0...</div>
+          <div class="out ok">✓ Installed to /usr/local/bin/easy-web</div>
+          <br>
+          <div class="out"># 验证安装</div>
+          <div><span class="prompt">$ </span><span class="cmd">easy-web version</span></div>
+          <div class="out">easy-web v0.1.0 darwin/arm64</div>
+          <br>
+          <div class="out"># 初始化配置（可选）</div>
+          <div><span class="prompt">$ </span><span class="cmd">easy-web init</span></div>
+          <div class="out ok">✓ Config written to ~/.easy-web.yaml</div>
+        </div>
+      </div>
+      <div class="steps" style="padding-top:0">
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>macOS 用户：首次运行授权</h4>
+            <p>若提示"无法验证开发者"，请切换到 <strong>macOS 授权</strong> 标签页查看授权方法。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>开始使用</h4>
+            <p><code>easy-web -u https://your-site.com</code> 即可登录并捕获 Cookie。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 手动安装 -->
+    <div class="install-panel" data-panel="manual">
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>前往 GitHub Releases 下载</h4>
+            <p>访问 <a href="https://github.com/smilemilks2021/easy-web/releases" target="_blank" style="color:var(--blue)">github.com/smilemilks2021/easy-web/releases</a>，下载对应平台的压缩包。</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>文件名对照</h4>
+            <p>
+              <code>easy-web_darwin_arm64.tar.gz</code> — macOS M 系列<br>
+              <code>easy-web_darwin_amd64.tar.gz</code> — macOS Intel<br>
+              <code>easy-web_linux_amd64.tar.gz</code> — Linux x86_64<br>
+              <code>easy-web_linux_arm64.tar.gz</code> — Linux ARM64<br>
+              <code>easy-web_windows_amd64.zip</code> — Windows 64-bit
+            </p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-content">
+            <h4>解压并放入 PATH</h4>
+            <p>macOS / Linux：解压后将 <code>easy-web</code> 移至 <code>/usr/local/bin/</code><br>
+            Windows：解压后将目录添加到系统 PATH，或直接在解压目录下运行。</p>
+          </div>
+        </div>
+      </div>
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Terminal — 手动安装示例</span>
+        </div>
+        <div class="terminal-body">
+          <div class="out"># macOS arm64 示例</div>
+          <div><span class="prompt">$ </span><span class="cmd">tar -xzf easy-web_darwin_arm64.tar.gz</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">sudo mv easy-web /usr/local/bin/</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">chmod +x /usr/local/bin/easy-web</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">easy-web version</span></div>
+          <div class="out">easy-web v0.1.0 darwin/arm64</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- macOS 授权 -->
+    <div class="install-panel" data-panel="macos-auth">
+      <div class="macos-dialog-wrap">
+        <div class="macos-dialog">
+          <div class="icon">🛡️</div>
+          <h4>"easy-web" 无法打开，因为无法验证开发者。</h4>
+          <p>macOS 无法验证此 App 是否包含恶意软件。</p>
+          <div class="btn-row">
+            <button class="btn-cancel">取消</button>
+            <button class="btn-ok">好</button>
+          </div>
+        </div>
+        <p class="dialog-desc">首次运行时 macOS 可能弹出此提示。选择"好"后，按以下步骤完成授权：</p>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-content">
+            <h4>方法一：命令行解除隔离（推荐）</h4>
+            <p>运行一次 <code>xattr</code> 命令，永久解除限制：</p>
+          </div>
+        </div>
+      </div>
+      <div class="terminal" style="margin: 0 24px 16px">
+        <div class="terminal-bar">
+          <div class="terminal-dot red"></div>
+          <div class="terminal-dot yellow"></div>
+          <div class="terminal-dot green"></div>
+          <span class="terminal-title">Terminal</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="prompt">$ </span><span class="cmd">xattr -d com.apple.quarantine /usr/local/bin/easy-web</span></div>
+          <div><span class="prompt">$ </span><span class="cmd">easy-web version</span></div>
+          <div class="out ok">easy-web v0.1.0 darwin/arm64</div>
+        </div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-content">
+            <h4>方法二：系统设置 → 隐私与安全</h4>
+            <p>在弹窗点击"好"后，前往 <strong>系统设置 → 隐私与安全</strong>，找到"easy-web 被阻止"的提示，点击 <strong>"仍然允许"</strong>。</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
+<hr class="divider">
+
+<!-- Quick Start -->
 <section>
-  <h2>Features</h2>
-  <div class="cards">
-    <div class="card"><h3>5 Auth Modes</h3><p>auto, chromedp, browser, chrome, remote — choose the right mode for each site.</p></div>
-    <div class="card"><h3>API Capture</h3><p>Record all API requests from any page with URL pattern filtering and auto-save.</p></div>
-    <div class="card"><h3>Authenticated Requests</h3><p>Replay cookies for GET/POST/PUT/DELETE — like curl but with full browser auth.</p></div>
-    <div class="card"><h3>Token Extraction</h3><p>Pull tokens from headers, localStorage, or sessionStorage automatically.</p></div>
-    <div class="card"><h3>Multi-Step Auth</h3><p>Chain SSO flows with YAML config: browser login → token exchange → final auth.</p></div>
-    <div class="card"><h3>Self-Update</h3><p>easy-web selfupdate — always stay current, even on Windows.</p></div>
+  <div class="section-title">快速开始</div>
+  <div class="section-sub">三条命令，从登录到自动化 API 调用</div>
+  <div class="quickstart-block">
+    <div class="qb-header">
+      <div class="dot" style="background:#ff5f57"></div>
+      <div class="dot" style="background:#febc2e"></div>
+      <div class="dot" style="background:#28c840"></div>
+      <span style="font-size:.78rem;color:var(--muted);margin-left:6px">Terminal</span>
+    </div>
+    <div class="qb-body">
+      <div class="qb-comment"># 1. 登录并捕获 Cookie（默认 auto 模式）</div>
+      <div class="qb-cmd"><span class="kw">easy-web</span> -u <span class="url">https://dashboard.example.com</span></div>
+      <br>
+      <div class="qb-comment"># 2. 发起认证 API 请求（自动使用缓存 Cookie）</div>
+      <div class="qb-cmd"><span class="kw">easy-web request</span> -u <span class="url">https://dashboard.example.com/api/data</span></div>
+      <br>
+      <div class="qb-comment"># 3. Cookie 已缓存，下次无需重新登录</div>
+      <div class="qb-cmd"><span class="kw">easy-web request</span> -u <span class="url">https://dashboard.example.com/api/metrics</span></div>
+    </div>
   </div>
 </section>
 
-<section>
-  <h2>Command Reference</h2>
-  <table>
-    <tr><th>Command</th><th>Description</th></tr>
-    <tr><td><code>easy-web -u &lt;url&gt;</code></td><td>Login and capture cookies (auto mode)</td></tr>
-    <tr><td><code>easy-web capture -u &lt;url&gt; -p /api/</code></td><td>Record API requests with pattern filter</td></tr>
-    <tr><td><code>easy-web request -u &lt;url&gt; -X POST -d '{}'</code></td><td>Authenticated HTTP request</td></tr>
-    <tr><td><code>easy-web cache list / clear -d &lt;domain&gt;</code></td><td>Manage cookie cache</td></tr>
-    <tr><td><code>easy-web auth --name &lt;key&gt;</code></td><td>Run named multi-step auth flow</td></tr>
-    <tr><td><code>easy-web chromium download</code></td><td>Download embedded Chromium</td></tr>
-    <tr><td><code>easy-web init</code></td><td>Generate ~/.easy-web.yaml</td></tr>
-    <tr><td><code>easy-web selfupdate</code></td><td>Update to latest version</td></tr>
-    <tr><td><code>easy-web version</code></td><td>Show version, platform, commit</td></tr>
-  </table>
-</section>
+<hr class="divider">
 
-<section style="text-align:center">
-  <h2>Platform Support</h2>
-  <div class="platforms">
-    <div class="platform">🍎 macOS arm64 (M-series)</div>
-    <div class="platform">🍎 macOS amd64 (Intel)</div>
-    <div class="platform">🐧 Linux amd64</div>
-    <div class="platform">🐧 Linux arm64</div>
-    <div class="platform">🪟 Windows amd64</div>
+<!-- Features -->
+<section>
+  <div class="section-title">核心功能</div>
+  <div class="section-sub">专为需要登录认证的内部系统和 Web 控制台设计</div>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon">🔐</div>
+      <h3>5 种认证模式</h3>
+      <p>auto、chromedp、browser、chrome、remote — 覆盖从全自动到手动登录的各类场景。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">📡</div>
+      <h3>API 录制</h3>
+      <p>自动捕获页面发出的所有 API 请求，支持 URL 路径过滤，帮助发现未公开的内部接口。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">⚡</div>
+      <h3>带认证的 HTTP 请求</h3>
+      <p>将缓存的 Cookie 注入 GET / POST / PUT / DELETE 请求，等同于自带完整认证的 curl。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🗝️</div>
+      <h3>Token 提取</h3>
+      <p>从请求头、localStorage 或 sessionStorage 中自动提取 Token 并缓存到本地。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔗</div>
+      <h3>多步骤 SSO 认证</h3>
+      <p>通过 YAML 配置链式认证流程：浏览器登录 → Token 交换 → 最终鉴权，支持复杂企业 SSO。</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🔄</div>
+      <h3>自动更新</h3>
+      <p>内置 <code>easy-web selfupdate</code>，通过 GitHub Releases 随时更新到最新版本。</p>
+    </div>
   </div>
 </section>
+
+<hr class="divider">
+
+<!-- Auth Modes -->
+<section>
+  <div class="section-title">认证模式对照</div>
+  <div class="section-sub">根据目标站点选择最合适的模式</div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+    <table class="mode-table">
+      <thead><tr><th>模式</th><th>参数</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>auto（默认）</td><td><code>—</code></td><td>缓存 → Chrome DB → 无头 Chromium（含 JWT 过期检测），推荐首选</td></tr>
+        <tr><td>chromedp</td><td><code>-m chromedp</code></td><td>启动无头 Chromium 自动化登录</td></tr>
+        <tr><td>browser</td><td><code>-m browser</code></td><td>打开可见浏览器，手动操作完成登录</td></tr>
+        <tr><td>chrome</td><td><code>-m chrome</code></td><td>读取本机 Chrome Cookie DB（kooky 跨平台解密，无需启动浏览器）</td></tr>
+        <tr><td>remote</td><td><code>-m remote</code></td><td>通过 CDP WebSocket 连接已运行的 Chrome</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Commands -->
+<section>
+  <div class="section-title">命令速查</div>
+  <div class="section-sub">常用命令一览</div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden">
+    <table class="cmd-table">
+      <thead><tr><th>命令</th><th>功能</th></tr></thead>
+      <tbody>
+        <tr><td><code>easy-web -u &lt;url&gt;</code></td><td>登录并捕获 Cookie（auto 模式）</td></tr>
+        <tr><td><code>easy-web -m browser -u &lt;url&gt;</code></td><td>可见浏览器，手动登录</td></tr>
+        <tr><td><code>easy-web capture -u &lt;url&gt; -p /api/ --auto-save</code></td><td>录制页面 API 请求</td></tr>
+        <tr><td><code>easy-web request -u &lt;url&gt;</code></td><td>GET 请求（自动注入 Cookie）</td></tr>
+        <tr><td><code>easy-web request -u &lt;url&gt; -X POST -d '{}'</code></td><td>POST 请求带 JSON Body</td></tr>
+        <tr><td><code>easy-web cache list</code></td><td>列出所有已缓存的域名</td></tr>
+        <tr><td><code>easy-web cache clear -d &lt;domain&gt;</code></td><td>清除指定域名的缓存</td></tr>
+        <tr><td><code>easy-web auth --name &lt;flow&gt;</code></td><td>执行命名的多步骤认证流</td></tr>
+        <tr><td><code>easy-web chromium download</code></td><td>下载内置 Chromium</td></tr>
+        <tr><td><code>easy-web init</code></td><td>生成 ~/.easy-web.yaml 默认配置</td></tr>
+        <tr><td><code>easy-web selfupdate</code></td><td>更新到最新版本</td></tr>
+        <tr><td><code>easy-web version</code></td><td>显示版本、平台、Git commit</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Platform -->
+<section>
+  <div class="section-title">平台支持</div>
+  <div class="section-sub">全平台静态二进制，无任何原生依赖</div>
+  <div class="platform-grid">
+    <div class="platform-card">
+      <div class="platform-icon">🍎</div>
+      <div class="platform-info">
+        <div class="platform-name">macOS arm64</div>
+        <div class="platform-arch">Apple M1 / M2 / M3 / M4</div>
+        <div class="platform-status">✓ 可用</div>
+      </div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon">🍎</div>
+      <div class="platform-info">
+        <div class="platform-name">macOS amd64</div>
+        <div class="platform-arch">Intel Mac</div>
+        <div class="platform-status">✓ 可用</div>
+      </div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon">🐧</div>
+      <div class="platform-info">
+        <div class="platform-name">Linux amd64</div>
+        <div class="platform-arch">x86_64</div>
+        <div class="platform-status">✓ 可用</div>
+      </div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon">🐧</div>
+      <div class="platform-info">
+        <div class="platform-name">Linux arm64</div>
+        <div class="platform-arch">ARM64</div>
+        <div class="platform-status">✓ 可用</div>
+      </div>
+    </div>
+    <div class="platform-card">
+      <div class="platform-icon">🪟</div>
+      <div class="platform-info">
+        <div class="platform-name">Windows amd64</div>
+        <div class="platform-arch">64-bit</div>
+        <div class="platform-status">✓ 可用</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
 
 <footer>
-  <a href="https://github.com/smilemilks2021/easy-web">GitHub</a> · MIT License · Built with Go + chromedp
+  <a href="https://github.com/smilemilks2021/easy-web">GitHub</a> &nbsp;·&nbsp;
+  <a href="https://github.com/smilemilks2021/easy-web/releases">Releases</a> &nbsp;·&nbsp;
+  MIT License &nbsp;·&nbsp; Built with Go + chromedp
 </footer>
 
 <script>
-function switchOS(os, tab) {
-  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-  tab.classList.add('active');
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.getElementById('tab-' + os).classList.add('active');
+// Tab switching
+document.querySelectorAll('.install-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const name = tab.dataset.tab;
+    document.querySelectorAll('.install-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.install-panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.querySelector(`[data-panel="${name}"]`).classList.add('active');
+  });
+});
+
+// OS button switching
+const cmds = {
+  mac: 'curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh',
+  linux: 'curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh',
+  win: 'irm https://smilemilks2021.github.io/easy-web/install.ps1 | iex'
+};
+const termLines = {
+  mac: ['darwin/arm64', '/usr/local/bin/easy-web', 'darwin/arm64'],
+  linux: ['linux/amd64', '/usr/local/bin/easy-web', 'linux/amd64'],
+  win: ['windows/amd64', 'C:\\Program Files\\easy-web\\easy-web.exe', 'windows/amd64']
+};
+document.querySelectorAll('.os-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.os-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const os = btn.dataset.os;
+    document.getElementById('cmd-text').textContent = cmds[os];
+    const [platform, path, arch] = termLines[os];
+    document.getElementById('term-oneclick').innerHTML = `
+      <div><span class="prompt">$ </span><span class="cmd">${escHtml(cmds[os])}</span></div>
+      <div class="out info">Detecting system: ${platform}</div>
+      <div class="out">Downloading easy-web v0.1.0 for ${platform}...</div>
+      <div class="out">  ██████████████████████████████  100%</div>
+      <div class="out ok">✓ Installed to ${path}</div>
+      <div class="out ok">✓ easy-web v0.1.0 ready</div>
+      <br>
+      <div><span class="prompt">$ </span><span class="cmd">easy-web version</span></div>
+      <div class="out">easy-web v0.1.0 ${arch} (build: abc1234)</div>
+    `;
+  });
+});
+
+function escHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
 }
-function copy(id, btn) {
-  navigator.clipboard.writeText(document.getElementById(id).textContent);
-  btn.textContent = 'Copied!';
-  setTimeout(() => btn.textContent = 'Copy', 1500);
+
+// Copy button
+function copyCmd(btn) {
+  const text = document.getElementById('cmd-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '已复制 ✓';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = '复制'; btn.classList.remove('copied'); }, 1800);
+  });
 }
+
+// System detection
+(function detect() {
+  const ua = navigator.userAgent;
+  let os = 'macOS', arch = 'arm64';
+  if (/Windows/.test(ua)) { os = 'Windows'; arch = 'amd64'; }
+  else if (/Linux/.test(ua)) { os = 'Linux'; arch = 'amd64'; }
+  else if (/Intel/.test(ua)) arch = 'amd64';
+  document.getElementById('detect-text').textContent = `检测到系统：${os} ${arch}`;
+  // Auto-select OS tab
+  if (/Windows/.test(ua)) {
+    document.querySelectorAll('.os-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.os === 'win');
+    });
+    document.getElementById('cmd-text').textContent = cmds.win;
+  } else if (/Linux/.test(ua)) {
+    document.querySelectorAll('.os-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.os === 'linux');
+    });
+  }
+})();
 </script>
 </body>
 </html>

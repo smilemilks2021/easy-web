@@ -253,13 +253,13 @@ footer a:hover { text-decoration: underline; }
         <div class="terminal-body" id="term-oneclick">
           <div><span class="prompt">$ </span><span class="cmd">curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh</span></div>
           <div class="out info">Detecting system: darwin/arm64</div>
-          <div class="out">Downloading easy-web v0.1.0 for darwin/arm64...</div>
+          <div class="out">Downloading easy-web v0.2.0 for darwin/arm64...</div>
           <div class="out">  ██████████████████████████████  100%</div>
           <div class="out ok">✓ Installed to /usr/local/bin/easy-web</div>
-          <div class="out ok">✓ easy-web v0.1.0 ready</div>
+          <div class="out ok">✓ easy-web v0.2.0 ready</div>
           <br>
           <div><span class="prompt">$ </span><span class="cmd">easy-web version</span></div>
-          <div class="out">easy-web v0.1.0 darwin/arm64 (build: abc1234)</div>
+          <div class="out">easy-web v0.2.0 darwin/arm64 (build: abc1234)</div>
         </div>
       </div>
     </div>
@@ -285,12 +285,12 @@ footer a:hover { text-decoration: underline; }
         <div class="terminal-body">
           <div><span class="prompt">$ </span><span class="cmd">curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh</span></div>
           <div class="out info">Detecting system: darwin/arm64</div>
-          <div class="out">Downloading easy-web v0.1.0...</div>
+          <div class="out">Downloading easy-web v0.2.0...</div>
           <div class="out ok">✓ Installed to /usr/local/bin/easy-web</div>
           <br>
           <div class="out"># 验证安装</div>
           <div><span class="prompt">$ </span><span class="cmd">easy-web version</span></div>
-          <div class="out">easy-web v0.1.0 darwin/arm64</div>
+          <div class="out">easy-web v0.2.0 darwin/arm64</div>
           <br>
           <div class="out"># 初始化配置（可选）</div>
           <div><span class="prompt">$ </span><span class="cmd">easy-web init</span></div>
@@ -360,7 +360,7 @@ footer a:hover { text-decoration: underline; }
           <div><span class="prompt">$ </span><span class="cmd">sudo mv easy-web /usr/local/bin/</span></div>
           <div><span class="prompt">$ </span><span class="cmd">chmod +x /usr/local/bin/easy-web</span></div>
           <div><span class="prompt">$ </span><span class="cmd">easy-web version</span></div>
-          <div class="out">easy-web v0.1.0 darwin/arm64</div>
+          <div class="out">easy-web v0.2.0 darwin/arm64</div>
         </div>
       </div>
     </div>
@@ -398,7 +398,7 @@ footer a:hover { text-decoration: underline; }
         <div class="terminal-body">
           <div><span class="prompt">$ </span><span class="cmd">xattr -d com.apple.quarantine /usr/local/bin/easy-web</span></div>
           <div><span class="prompt">$ </span><span class="cmd">easy-web version</span></div>
-          <div class="out ok">easy-web v0.1.0 darwin/arm64</div>
+          <div class="out ok">easy-web v0.2.0 darwin/arm64</div>
         </div>
       </div>
       <div class="steps">
@@ -618,13 +618,13 @@ document.querySelectorAll('.os-btn').forEach(btn => {
     document.getElementById('term-oneclick').innerHTML = `
       <div><span class="prompt">$ </span><span class="cmd">${escHtml(cmds[os])}</span></div>
       <div class="out info">Detecting system: ${platform}</div>
-      <div class="out">Downloading easy-web v0.1.0 for ${platform}...</div>
+      <div class="out">Downloading easy-web v0.2.0 for ${platform}...</div>
       <div class="out">  ██████████████████████████████  100%</div>
       <div class="out ok">✓ Installed to ${path}</div>
-      <div class="out ok">✓ easy-web v0.1.0 ready</div>
+      <div class="out ok">✓ easy-web v0.2.0 ready</div>
       <br>
       <div><span class="prompt">$ </span><span class="cmd">easy-web version</span></div>
-      <div class="out">easy-web v0.1.0 ${arch} (build: abc1234)</div>
+      <div class="out">easy-web v0.2.0 ${arch} (build: abc1234)</div>
     `;
   });
 });

@@ -8,7 +8,7 @@
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)](#平台支持)
 [![安装指南](https://img.shields.io/badge/安装指南-在线文档-blue)](https://smilemilks2021.github.io/easy-web/install.html)
 
-**[在线安装指南](https://smilemilks2021.github.io/easy-web/install.html)** · **[使用指南](GUIDE_zh.md)**
+**[在线安装指南](https://smilemilks2021.github.io/easy-web/install.html)** · **[使用指南](GUIDE_zh.md)** · **[Claude Code Skill](SKILL.md)**
 
 ---
 

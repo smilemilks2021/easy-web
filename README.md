@@ -356,6 +356,11 @@ goreleaser build --snapshot --clean
 
 ## Changelog
 
+### v0.2.1 — 2026-03-20
+
+- **fix**: `selfupdate` on `/usr/local/bin` now shows a clear hint instead of a raw permission error:
+  > `Permission denied — try: sudo easy-web selfupdate`
+
 ### v0.2.0 — 2026-03-20
 
 - **Claude Code Skill** — `SKILL.md` added; easy-web is now a first-class Claude Code skill ([docs](SKILL.md))

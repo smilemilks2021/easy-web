@@ -8,6 +8,9 @@
 [![Go](https://img.shields.io/badge/Go-1.22+-00ADD8?logo=go)](https://go.dev)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Platform](https://img.shields.io/badge/platform-macOS%20%7C%20Linux%20%7C%20Windows-lightgrey)](#platform-support)
+[![Install](https://img.shields.io/badge/Install-Guide-blue)](https://smilemilks2021.github.io/easy-web/install.html)
+
+**[Install Guide](https://smilemilks2021.github.io/easy-web/install.html)** · **[中文使用指南](GUIDE_zh.md)**
 
 ---
 

@@ -113,7 +113,10 @@ func extractZip(src, dest string) error {
 			continue
 		}
 		os.MkdirAll(filepath.Dir(path), 0755)
-		rc, _ := f.Open()
+		rc, err := f.Open()
+		if err != nil {
+			return fmt.Errorf("open zip entry %s: %w", f.Name, err)
+		}
 		out, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, f.Mode())
 		if err != nil {
 			rc.Close()

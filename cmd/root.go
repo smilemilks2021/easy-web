@@ -33,7 +33,6 @@ var rootCmd = &cobra.Command{
 authenticated API requests. Supports 5 auth modes, API capture,
 token extraction, and local cache management.`,
 	PersistentPreRunE: func(cmd *cobra.Command, args []string) error {
-		config.Init() // idempotent - safe to call again
 		return nil
 	},
 	RunE: func(cmd *cobra.Command, args []string) error {

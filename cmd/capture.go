@@ -49,6 +49,26 @@ func init() {
 				}
 			}
 
+			// Save captured requests for replay command.
+			if len(reqs) > 0 {
+				domain := parseHost(targetURL)
+				if saveErr := SaveReplayRequests(domain, reqs); saveErr != nil {
+					fmt.Printf("[replay] warning: could not save replay data: %v\n", saveErr)
+				}
+			}
+
+			// Export HAR if requested.
+			exportFmt, _ := cmd.Flags().GetString("export")
+			outputPath, _ := cmd.Flags().GetString("output")
+			if exportFmt == "har" {
+				if outputPath == "" {
+					outputPath = "output.har"
+				}
+				if exportErr := exportHAR(reqs, targetURL, outputPath); exportErr != nil {
+					fmt.Printf("[har] warning: could not export HAR: %v\n", exportErr)
+				}
+			}
+
 			return nil
 		},
 	}
@@ -57,5 +77,7 @@ func init() {
 	cmd.Flags().Bool("auto-save", false, "Auto-save without confirmation")
 	cmd.Flags().Bool("interactive", false, "Interactive API selection")
 	cmd.Flags().String("skill-name", "", "Override generated skill name (default: derived from domain)")
+	cmd.Flags().String("export", "", "Export format after capture (har)")
+	cmd.Flags().StringP("output", "o", "", "Output file path for export (default: output.har)")
 	rootCmd.AddCommand(cmd)
 }

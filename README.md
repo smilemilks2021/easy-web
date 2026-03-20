@@ -356,6 +356,37 @@ goreleaser build --snapshot --clean
 
 ## Changelog
 
+### v0.3.0 — 2026-03-20
+
+**New commands**
+
+- **`easy-web request`** — full rewrite: `--retry` / `--retry-delay` / `--proxy` / `--timeout`, `--output json|raw|headers`, `-v` verbose, `--form` / `--file` multipart, `--jq` filter, ANSI JSON highlighting (TTY-only)
+- **`easy-web watch`** — poll any URL at a configurable interval (`-i`), optional `--diff` mode to print only changed lines
+- **`easy-web env`** — named environments: `add` / `use` / `list` / `rm` / `show`; active env persisted in `~/.easy-web.yaml`
+- **`easy-web replay`** — replay previously captured request snapshots for a domain
+- **`easy-web run <workflow.yml>`** — chain HTTP steps with variable extraction, jq assertions, and `{{var}}` substitution
+- **`easy-web skill gen`** — generate or smart-merge a Claude Code Skill from captured APIs (standalone command)
+- **`easy-web skill list`** — list all generated Skills under `~/.claude/skills/`
+
+**Enhancements**
+
+- `capture` now saves HAR 1.2 export (`--export har -o output.har`), calls `skill.Generate` automatically, and persists request snapshots for `replay`
+- `request.NewClient` returns `(*Client, error)` — invalid proxy URL now surfaces immediately instead of silently failing
+- Retry loop nil-response guard separated from status-code check to eliminate potential panic
+- Smart merge uses structured `<!-- easy-web: METHOD URL -->` comments for method-aware dedup (POST + GET on same path handled independently)
+- `viper.ReadInConfig` called before `WriteConfigAs` in `env` commands to preserve existing config keys
+- HAR creator version reads `appVersion` instead of hardcoded string
+- `defer signal.Stop(sigCh)` added in `watch` to prevent goroutine leak on exit
+- jq filter failures now print a `[jq] warning:` to stderr instead of silently dropping output
+- `--from-file` flag in `skill gen` is hidden until implemented
+
+**Bug fixes (code review)**
+
+- `resp.Status` slicing replaced with `strings.TrimPrefix` (no panic on empty status string)
+- Removed duplicate `cookieDomain` in `run.go` — `parseHost` reused from root
+- Local `--url` / `--mode` flags removed from `request` command; persistent root flags used consistently
+- ANSI colour output suppressed when stdout is not a TTY (`isTerminal()` check)
+
 ### v0.2.1 — 2026-03-20
 
 - **fix**: `selfupdate` on `/usr/local/bin` now shows a clear hint instead of a raw permission error:

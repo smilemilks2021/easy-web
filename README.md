@@ -2,7 +2,7 @@
 
 > Browser authentication CLI — capture login cookies, automate authenticated API calls from your terminal.
 >
-> 将浏览器登录态变成可编程 API 调用的 CLI 工具。[webx-tool](https://github.com) 开源复刻版。
+> 将浏览器登录态变成可编程 API 调用的 CLI 工具。
 
 [![Release](https://img.shields.io/github/v/release/smilemilks2021/easy-web)](https://github.com/smilemilks2021/easy-web/releases)
 [![Go](https://img.shields.io/badge/Go-1.22+-00ADD8?logo=go)](https://go.dev)

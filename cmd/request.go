@@ -27,6 +27,9 @@ func init() {
 			store := cookie.NewCache(config.CacheDir())
 			entries, err := store.Load(parseHost(targetURL))
 			if err != nil {
+				return fmt.Errorf("reading cookie cache: %w", err)
+			}
+			if len(entries) == 0 {
 				mode, _ := cmd.Flags().GetString("mode")
 				result, err := auth.Resolve(targetURL, auth.Options{Mode: mode})
 				if err != nil {

@@ -9,6 +9,7 @@ description: |
   - Need to repeatedly call APIs on internal consoles, dashboards, or Spark UI
   - Want to discover what APIs a page is calling (capture mode)
   - Scripting batch operations on web interfaces that have no official API
+  - Want to package a site's auth + APIs into a reusable Claude Code Skill
 
   **Trigger phrases:**
   - "This page requires login, help me fetch/query data"
@@ -17,6 +18,8 @@ description: |
   - "This Spark/Grafana/Jenkins URL needs authentication"
   - "curl returns 401/403, how do I get auth"
   - "Batch operations on this system"
+  - "Turn this site into a skill / generate a skill for this system"
+  - "帮我把这个系统封装成一个 Skill"
 
 allowed-tools: Bash(easy-web:*)
 user-invocable: true
@@ -167,6 +170,86 @@ easy-web cache list                  # list all cached domains
 easy-web cache clear -d example.com  # clear a specific domain
 easy-web cache clear --all           # clear all cached credentials
 ```
+
+---
+
+## Generate a Site Skill
+
+Use `capture` to discover a site's auth and APIs, then let Claude Code package everything into a reusable Skill — so any future automation on that system is one command away.
+
+### Full Workflow
+
+**Step 1 — Capture auth and record API calls**
+
+```bash
+# Navigate to the target site, login, and record all API traffic
+yes N | easy-web capture -u https://your-system.example.com -p /api/ -t 5m --auto-save
+```
+
+This writes the discovered auth strategy and API patterns to `~/.easy-web.yaml`.
+
+**Step 2 — Read captured config**
+
+After capture completes, Claude Code reads `~/.easy-web.yaml` to extract:
+- The auth method used (cookie / token / SSO chain)
+- Which API endpoints were called
+- Request methods, headers, and payload shapes
+
+```bash
+cat ~/.easy-web.yaml
+```
+
+**Step 3 — Claude Code generates the Skill**
+
+Claude Code creates `~/.claude/skills/<site-name>/SKILL.md` containing:
+
+```markdown
+---
+name: your-system
+description: |
+  Automates <site-name> — handles auth and exposes common operations as commands.
+  Trigger: "help me ... on <site-name>"
+allowed-tools: Bash(easy-web:*)
+---
+
+# your-system Skill
+
+## Auth
+easy-web -u https://your-system.example.com   # login once, cookies cached
+
+## Common Operations
+\`\`\`bash
+# List resources
+easy-web request -u https://your-system.example.com/api/v1/resources
+
+# Create
+easy-web request -u https://your-system.example.com/api/v1/resources \
+  -X POST -d '{"name":"value"}'
+
+# Delete
+easy-web request -u https://your-system.example.com/api/v1/resources/123 -X DELETE
+\`\`\`
+```
+
+**Step 4 — Use the generated Skill**
+
+Once saved, Claude Code picks up the Skill automatically. From then on, just say:
+
+> "List all resources on your-system"
+> "Create a new task on your-system with name=foo"
+
+Claude Code will call the right `easy-web request` command without any manual setup.
+
+---
+
+### Quick Reference
+
+| Step | Command |
+|------|---------|
+| 1. Capture | `yes N \| easy-web capture -u <url> -p /api/ -t 5m --auto-save` |
+| 2. Review | `cat ~/.easy-web.yaml` |
+| 3. Generate | Claude Code reads yaml → writes `~/.claude/skills/<name>/SKILL.md` |
+| 4. Use | Tell Claude Code what you want to do on that system |
 
 ---
 

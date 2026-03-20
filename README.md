@@ -54,6 +54,14 @@ go build -o easy-web .
 easy-web version
 ```
 
+### Update
+
+```bash
+easy-web selfupdate
+```
+
+One command updates to the latest release. No re-downloading the install script needed.
+
 ---
 
 ## Quick Start
@@ -343,6 +351,33 @@ go test ./...
 # Cross-compile (requires goreleaser)
 goreleaser build --snapshot --clean
 ```
+
+---
+
+## Changelog
+
+### v0.2.1 — 2026-03-20
+
+- **fix**: `selfupdate` on `/usr/local/bin` now shows a clear hint instead of a raw permission error:
+  > `Permission denied — try: sudo easy-web selfupdate`
+
+### v0.2.0 — 2026-03-20
+
+- **Claude Code Skill** — `SKILL.md` added; easy-web is now a first-class Claude Code skill ([docs](SKILL.md))
+- **Generate Site Skill workflow** — `capture` → read config → Claude Code auto-generates a reusable Skill for any login-protected system
+- **Rich install page** — `docs/install.html` with OS auto-detection, terminal mockups, and macOS Gatekeeper guidance
+- **Docs overhaul** — GUIDE_zh.md section 10: Claude Code integration guide; upgrade instructions added to README and GUIDE_zh.md
+
+### v0.1.0 — 2026-03-20
+
+- Initial release
+- 5 auth modes: `auto` / `chromedp` / `browser` / `chrome` / `remote`
+- JWT expiry auto-detection in auto mode
+- `capture` mode for recording and replaying API calls
+- Embedded Chromium management (`chromium download/info/clean`)
+- Multi-step SSO auth via YAML config
+- Self-update via GitHub Releases (`easy-web selfupdate`)
+- Cross-platform: macOS (arm64/amd64), Linux (amd64/arm64), Windows (amd64)
 
 ---
 

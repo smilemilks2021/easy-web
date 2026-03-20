@@ -18,9 +18,12 @@ func TestClientSendsCookies(t *testing.T) {
 	}))
 	defer ts.Close()
 
-	c := request.NewClient([]*cookie.Entry{
+	c, err := request.NewClient([]*cookie.Entry{
 		{Name: "session", Value: "tok123", Domain: "127.0.0.1", Expires: time.Now().Add(time.Hour)},
 	}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
 	if _, err := c.Do("GET", ts.URL, "", nil); err != nil {
 		t.Fatal(err)
 	}

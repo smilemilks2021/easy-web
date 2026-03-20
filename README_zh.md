@@ -52,6 +52,14 @@ go build -o easy-web .
 easy-web version
 ```
 
+### 升级
+
+```bash
+easy-web selfupdate
+```
+
+内置自升级，一条命令更新到最新版本，无需重新安装。
+
 ---
 
 ## 快速上手

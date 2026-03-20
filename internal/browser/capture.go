@@ -2,6 +2,7 @@ package browser
 
 import (
 	"context"
+	"encoding/base64"
 	"fmt"
 	"strings"
 	"sync"
@@ -15,6 +16,7 @@ type CapturedRequest struct {
 	URL     string
 	Method  string
 	Headers map[string]string
+	Body    string // POST body (PostData from network event)
 }
 
 type CaptureOptions struct {
@@ -67,6 +69,7 @@ func CaptureRequests(targetURL string, opts CaptureOptions) ([]*CapturedRequest,
 			URL:     req.Request.URL,
 			Method:  req.Request.Method,
 			Headers: headers,
+			Body:    extractPostBody(req.Request),
 		})
 		mu.Unlock()
 	})
@@ -90,6 +93,27 @@ func CaptureRequests(targetURL string, opts CaptureOptions) ([]*CapturedRequest,
 	result := captured
 	mu.Unlock()
 	return result, nil
+}
+
+// extractPostBody reconstructs the request body from PostDataEntries.
+// Each entry's Bytes field is base64-encoded; falls back to raw value on decode error.
+func extractPostBody(req *network.Request) string {
+	if !req.HasPostData || len(req.PostDataEntries) == 0 {
+		return ""
+	}
+	var parts []string
+	for _, entry := range req.PostDataEntries {
+		if entry.Bytes == "" {
+			continue
+		}
+		decoded, err := base64.StdEncoding.DecodeString(entry.Bytes)
+		if err != nil {
+			parts = append(parts, entry.Bytes)
+		} else {
+			parts = append(parts, string(decoded))
+		}
+	}
+	return strings.Join(parts, "")
 }
 
 func matchesPatterns(url string, patterns []string) bool {

@@ -1,6 +1,6 @@
 # easy-web 使用指南
 
-> **版本**: 0.1.0
+> **版本**: 0.2.0
 > **最后更新**: 2026-03-20
 
 easy-web 是一款命令行浏览器认证工具，能够将任何需要登录的网页转化为可自动化调用的 API。它通过捕获浏览器的认证信息（Cookies、Tokens），并缓存复用，让你在命令行环境下也能轻松访问需要登录的前端接口。
@@ -224,12 +224,32 @@ easy-web config edit
 # 生成 ~/.easy-web.yaml 默认配置
 easy-web init
 
-# 更新到最新版本
+# 升级到最新版本（一条命令，无需重新安装）
 easy-web selfupdate
 
-# 显示版本号、平台、Git commit
+# 查看当前版本号、平台、Git commit
 easy-web version
 ```
+
+**版本升级说明：**
+
+easy-web 内置自升级功能，通过 GitHub Releases 自动下载最新二进制文件。
+
+```bash
+# 查看当前版本
+easy-web version
+
+# 升级（会自动检测是否有新版本）
+easy-web selfupdate
+
+# 升级后验证
+easy-web version
+```
+
+> 如遇升级失败，也可以重新运行安装脚本覆盖安装：
+> ```bash
+> curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh
+> ```
 
 ---
 

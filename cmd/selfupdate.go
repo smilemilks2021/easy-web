@@ -2,7 +2,9 @@ package cmd
 
 import (
 	"context"
+	"errors"
 	"fmt"
+	"os"
 
 	selfupdate "github.com/creativeprojects/go-selfupdate"
 	"github.com/spf13/cobra"
@@ -31,6 +33,9 @@ func init() {
 				return err
 			}
 			if err := updater.UpdateTo(context.Background(), latest, exe); err != nil {
+				if errors.Is(err, os.ErrPermission) {
+					return fmt.Errorf("permission denied writing to %s\n\nTry:\n  sudo easy-web selfupdate\n\nOr reinstall:\n  curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh", exe)
+				}
 				return fmt.Errorf("update failed: %w", err)
 			}
 			fmt.Printf("Updated to %s.\n", latest.Version())

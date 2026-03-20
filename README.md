@@ -54,6 +54,14 @@ go build -o easy-web .
 easy-web version
 ```
 
+### Update
+
+```bash
+easy-web selfupdate
+```
+
+One command updates to the latest release. No re-downloading the install script needed.
+
 ---
 
 ## Quick Start

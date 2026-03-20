@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>easy-web — Browser Auth CLI</title>
+<style>
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--blue:#58a6ff;--green:#3fb950;--text:#c9d1d9;--muted:#8b949e}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}
+.hero{text-align:center;padding:60px 20px 40px;border-bottom:1px solid var(--border)}
+.hero h1{font-size:2.8rem;font-weight:700;color:#fff;margin-bottom:12px}
+.hero h1 span{color:var(--blue)}
+.hero p{font-size:1.1rem;color:var(--muted);max-width:600px;margin:0 auto 28px}
+.badge{display:inline-block;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:4px 14px;font-size:.82rem;margin:0 3px}
+.tabs{display:flex;gap:4px;margin:28px auto 0;max-width:640px;justify-content:center}
+.tab{padding:8px 20px;border-radius:6px 6px 0 0;cursor:pointer;background:var(--card);border:1px solid var(--border);border-bottom:none;color:var(--muted);font-size:.9rem}
+.tab.active{color:var(--blue);background:#1a2233;border-color:var(--blue)}
+.tab-content{display:none;background:var(--card);border:1px solid var(--border);border-radius:0 8px 8px 8px;padding:20px 24px;max-width:640px;margin:0 auto;position:relative}
+.tab-content.active{display:block}
+.tab-content .label{font-size:.72rem;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.06em}
+.tab-content code{color:var(--green);font-family:"SF Mono",Consolas,monospace;font-size:.92rem;word-break:break-all}
+.copy-btn{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:var(--blue);color:#fff;border:none;border-radius:6px;padding:5px 14px;cursor:pointer;font-size:.8rem}
+.copy-btn:hover{opacity:.85}
+section{max-width:960px;margin:0 auto;padding:48px 20px}
+h2{font-size:1.5rem;color:#fff;margin-bottom:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px}
+.card h3{color:var(--blue);margin-bottom:6px;font-size:.95rem}
+.card p{color:var(--muted);font-size:.88rem}
+table{width:100%;border-collapse:collapse}
+th,td{padding:9px 14px;border-bottom:1px solid var(--border);text-align:left;font-size:.88rem}
+th{color:var(--muted);font-weight:500}
+td code{color:var(--green);font-family:"SF Mono",Consolas,monospace;font-size:.82rem}
+.platforms{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:14px}
+.platform{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:9px 18px;font-size:.88rem}
+footer{text-align:center;padding:28px;color:var(--muted);font-size:.83rem;border-top:1px solid var(--border)}
+footer a{color:var(--blue);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="hero">
+  <h1><span>easy</span>-web</h1>
+  <p>Browser authentication CLI — capture login cookies, automate authenticated API calls from your terminal.</p>
+  <span class="badge">Go</span><span class="badge">macOS</span><span class="badge">Linux</span><span class="badge">Windows</span><span class="badge">MIT</span>
+
+  <div class="tabs">
+    <div class="tab active" onclick="switchOS('unix',this)">macOS / Linux</div>
+    <div class="tab" onclick="switchOS('win',this)">Windows</div>
+  </div>
+  <div id="tab-unix" class="tab-content active">
+    <div class="label">Install with curl</div>
+    <code id="cmd-unix">curl -sSL https://smilemilks2021.github.io/easy-web/install.sh | sh</code>
+    <button class="copy-btn" onclick="copy('cmd-unix',this)">Copy</button>
+  </div>
+  <div id="tab-win" class="tab-content">
+    <div class="label">Install with PowerShell</div>
+    <code id="cmd-win">irm https://smilemilks2021.github.io/easy-web/install.ps1 | iex</code>
+    <button class="copy-btn" onclick="copy('cmd-win',this)">Copy</button>
+  </div>
+</div>
+
+<section>
+  <h2>Features</h2>
+  <div class="cards">
+    <div class="card"><h3>5 Auth Modes</h3><p>auto, chromedp, browser, chrome, remote — choose the right mode for each site.</p></div>
+    <div class="card"><h3>API Capture</h3><p>Record all API requests from any page with URL pattern filtering and auto-save.</p></div>
+    <div class="card"><h3>Authenticated Requests</h3><p>Replay cookies for GET/POST/PUT/DELETE — like curl but with full browser auth.</p></div>
+    <div class="card"><h3>Token Extraction</h3><p>Pull tokens from headers, localStorage, or sessionStorage automatically.</p></div>
+    <div class="card"><h3>Multi-Step Auth</h3><p>Chain SSO flows with YAML config: browser login → token exchange → final auth.</p></div>
+    <div class="card"><h3>Self-Update</h3><p>easy-web selfupdate — always stay current, even on Windows.</p></div>
+  </div>
+</section>
+
+<section>
+  <h2>Command Reference</h2>
+  <table>
+    <tr><th>Command</th><th>Description</th></tr>
+    <tr><td><code>easy-web -u &lt;url&gt;</code></td><td>Login and capture cookies (auto mode)</td></tr>
+    <tr><td><code>easy-web capture -u &lt;url&gt; -p /api/</code></td><td>Record API requests with pattern filter</td></tr>
+    <tr><td><code>easy-web request -u &lt;url&gt; -X POST -d '{}'</code></td><td>Authenticated HTTP request</td></tr>
+    <tr><td><code>easy-web cache list / clear -d &lt;domain&gt;</code></td><td>Manage cookie cache</td></tr>
+    <tr><td><code>easy-web auth --name &lt;key&gt;</code></td><td>Run named multi-step auth flow</td></tr>
+    <tr><td><code>easy-web chromium download</code></td><td>Download embedded Chromium</td></tr>
+    <tr><td><code>easy-web init</code></td><td>Generate ~/.easy-web.yaml</td></tr>
+    <tr><td><code>easy-web selfupdate</code></td><td>Update to latest version</td></tr>
+    <tr><td><code>easy-web version</code></td><td>Show version, platform, commit</td></tr>
+  </table>
+</section>
+
+<section style="text-align:center">
+  <h2>Platform Support</h2>
+  <div class="platforms">
+    <div class="platform">🍎 macOS arm64 (M-series)</div>
+    <div class="platform">🍎 macOS amd64 (Intel)</div>
+    <div class="platform">🐧 Linux amd64</div>
+    <div class="platform">🐧 Linux arm64</div>
+    <div class="platform">🪟 Windows amd64</div>
+  </div>
+</section>
+
+<footer>
+  <a href="https://github.com/smilemilks2021/easy-web">GitHub</a> · MIT License · Built with Go + chromedp
+</footer>
+
+<script>
+function switchOS(os, tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  tab.classList.add('active');
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + os).classList.add('active');
+}
+function copy(id, btn) {
+  navigator.clipboard.writeText(document.getElementById(id).textContent);
+  btn.textContent = 'Copied!';
+  setTimeout(() => btn.textContent = 'Copy', 1500);
+}
+</script>
+</body>
+</html>
